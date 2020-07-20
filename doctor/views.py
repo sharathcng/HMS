@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,reverse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from . models import extendedUser,patientModel
+from pharmacy.models import medicines
 from doctor.forms import PatientRegisterForms
 from django.contrib.auth.decorators import login_required
 
@@ -81,9 +82,11 @@ def patient_SignUp_Page(request):
 
 def patient_Login_Page(request):
     if request.method == "POST":
-        patient = request.POST.get('adharNumber')
-        if patient == patientModel.objects.filter(adharNumber=patient):
-            context = {'patient':patient}
+        patient = request.POST['adharNumber']
+        if patientModel.objects.filter(adharNumber=patient):
+            patient = patientModel.objects.filter(adharNumber=patient)
+            medicineList = medicines.objects.all()
+            context = {'patient':patient,'medicineList':medicineList}
             return render(request,'patients/patientPrescriptionPage.html',context)
         else:
             return redirect(patient_SignUp_Page)

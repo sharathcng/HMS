@@ -12,4 +12,19 @@
     <h3>{{ d.mobileNumber }}</h3>
     <h3>{{ d.place }}</h3>
 {% endfor %}
+
+
+{% csrf_token %}
+           <center>
+               <h1> Search and select Medicines </h1>
+               <hr/>
+               <input list="selectmedic" placeholder="Search Medicines"/>
+               <datalist id="selectmedic" style="width:1000px;">
+                   <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
+                   {% for medic in medicineList %}
+                   <option>{{ medic.drug_name }}</option>
+                   {% endfor %}
+               </datalist>
+           </center>
+
 {% endblock %}
