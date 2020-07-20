@@ -8,7 +8,7 @@ class extendedUser(models.Model):
     user = models.OneToOneField(User,on_delete = models.CASCADE)
     
 class patientModel(models.Model):
-    adharNumber = models.IntegerField()
+    adharNumber = models.BigIntegerField()
     firstname = models.CharField(max_length = 20)
     careof = models.CharField(max_length = 10)
     lastname = models.CharField(max_length = 20)

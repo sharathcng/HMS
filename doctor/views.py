@@ -61,48 +61,31 @@ def logout(request):
 
 def patient_SignUp_Page(request):
     if request.method == "POST":
-        print("0")
         forms = PatientRegisterForms(request.POST)
-        var1 = request.POST["adharNumber"]
-        var2 = request.POST["firstname"]
-        var3 = request.POST["lastname"]
-        var4 = request.POST["careof"]
-        var5 = request.POST["gender"]
-        var6 = request.POST["weight"]
-        var7 = request.POST["age"]
-        var8 = request.POST["mobileNumber"]
-        print(var1,var2,var3,var4,var5,var6,var7,var8)
-        if forms.is_valid():
-            print('1')
-            forms.save()
-            return render(request,'patients/patientPrescriptionPage.html')
-        else:
-            return render(request,'patients/patientPrescriptionPage.html')
-        # try:
-        #     patient = patientModel.objects.get(adharNumber=request.POST['adharNumber'])
-        #     return render(request,'patients/patientSignUpPage.html',{'adharNumberError':"Patient with this Adhar number already exist"})
-        # except:
-        #     mobileNumber = request.POST['mobileNumber']
-        #     if len(str(mobileNumber)) != 10 :
-        #         return render(request,'patients/patientSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
-        #     else:
-        #         if forms.is_valid():
-        #             forms.save()
-        #             # context = {'data':data}
-        #             return render(request,'patients/patientPrescriptionPage.html')
-        #         else:
-        #             return render(request,'patients/patientSignUpPage.html')
+        try:
+            patient = patientModel.objects.get(adharNumber=request.POST['adharNumber'])
+            return render(request,'patients/patientSignUpPage.html',{'adharNumberError':"Patient with this Adhar number already exist"})
+        except:
+            mobileNumber = request.POST['mobileNumber']
+            if len(str(mobileNumber)) != 10 :
+                return render(request,'patients/patientSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
+            else:
+                if forms.is_valid():
+                    patient = forms.save()
+                    context = {'patient':patient}
+                    return render(request,'patients/patientPrescriptionPage.html',context)
+                else:
+                    return render(request,'patients/patientSignUpPage.html')
     else:
         return render(request,'patients/patientSignUpPage.html')
 
 def patient_Login_Page(request):
     if request.method == "POST":
-        adharNumber = request.POST['adharNumber']
-        if(adharNumber != patientModel.objects.get(adharNumber=adharNumber)):
-            return redirect(patient_SignUp_Page,{'adharNumberError':"Patient with this Adhar number doesnot exist"})
-        else:
-            patient = patientModel.objects.get(adharNumber=adharNumber)
+        patient = request.POST.get('adharNumber')
+        if patient == patientModel.objects.filter(adharNumber=patient):
             context = {'patient':patient}
             return render(request,'patients/patientPrescriptionPage.html',context)
+        else:
+            return redirect(patient_SignUp_Page)
     else:
         return render(request,'patients/patientLoginPage.html')

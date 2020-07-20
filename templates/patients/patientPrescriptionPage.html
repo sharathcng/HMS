@@ -3,17 +3,13 @@
 
 {% block content %}
 
-<!-- 
-{% for d in data1 %}
-    <h2>{{ d.first_name }} 
-        {{ d.last_name }}
-    </h2>
-    <p>Magnam</p>
-{% endfor %}
 
-{{request.user.first_name}}
- {% for d2 in data2 %}
-    <h3>{{ d2.mobileNumber }}</h3>
-    <h3>{{ d2.gender }}</h3>
-{% endfor %} -->
+{% for d in patient %}
+    <div><h2>{{ d.firstname }}<h4>{{ d.careof }}</h4><h2>{{ d.lastname }}</h2></div>
+    <h3>{{ d.age }}</h3>
+    <h3>{{ d.weight }}</h3>
+    <h3>{{ d.gender }}</h3>
+    <h3>{{ d.mobileNumber }}</h3>
+    <h3>{{ d.place }}</h3>
+{% endfor %}
 {% endblock %}
