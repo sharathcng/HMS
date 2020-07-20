@@ -1,0 +1,108 @@
+from django.shortcuts import render,redirect,reverse
+from django.contrib.auth.models import User
+from django.contrib import auth
+from . models import extendedUser,patientModel
+from doctor.forms import PatientRegisterForms
+from django.contrib.auth.decorators import login_required
+
+
+# Create your views here.
+
+@login_required
+def dr_dashboard(request):
+    data1 = User.objects.filter(username=request.user)
+    data2 = extendedUser.objects.filter(user=request.user)
+    return render(request,'doctor/dashboard.html',{'data1':data1,'data2':data2})
+
+def dr_SignUp_Page(request):
+    if request.method == "POST":
+        # to create new user
+        if request.POST['password'] == request.POST['re_password']:
+            #both the passwords matched
+            #now check if a previous user exists
+            try:
+                user = User.objects.get(username=request.POST['username'])
+                return render(request,'doctor/drSignUpPage.html',{'userNameError':"Username already exist"})
+            except User.DoesNotExist:
+                mobileNumber = request.POST['mobileNumber']
+                gender = request.POST['gender']
+                if len(mobileNumber) == 10 :
+                    user = User.objects.create_user(username=request.POST['username'],first_name=request.POST['firstname'],last_name=request.POST['lastname'],password=request.POST['password'],email=request.POST['email'])
+                    newExtendedUser = extendedUser(mobileNumber = mobileNumber,gender=gender,user=user) 
+                    newExtendedUser.save()                   
+                    auth.login(request,user)
+                    return redirect(dr_dashboard)
+                else:
+                    return render(request,'doctor/drSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
+        else:
+            return render(request,'doctor/drSignUpPage.html',{'passwordError':"Passwords doesnot match"})
+    else:
+        return render(request,'doctor/drSignUpPage.html')
+
+
+
+def dr_Login_Page(request):
+    if request.method == "POST":
+        user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+            auth.login(request, user)
+            return redirect(dr_dashboard)
+        else:
+            return render(request,'doctor/drLoginPage.html',{'usernameError':"Username doesnot exist"})
+    else:
+        return render(request,'doctor/drLoginPage.html')
+
+def logout(request):
+    auth.logout(request)
+    return render(request,'hospital/homePage.html')
+
+
+#patient_data
+
+def patient_SignUp_Page(request):
+    if request.method == "POST":
+        print("0")
+        forms = PatientRegisterForms(request.POST)
+        var1 = request.POST["adharNumber"]
+        var2 = request.POST["firstname"]
+        var3 = request.POST["lastname"]
+        var4 = request.POST["careof"]
+        var5 = request.POST["gender"]
+        var6 = request.POST["weight"]
+        var7 = request.POST["age"]
+        var8 = request.POST["mobileNumber"]
+        print(var1,var2,var3,var4,var5,var6,var7,var8)
+        if forms.is_valid():
+            print('1')
+            forms.save()
+            return render(request,'patients/patientPrescriptionPage.html')
+        else:
+            return render(request,'patients/patientPrescriptionPage.html')
+        # try:
+        #     patient = patientModel.objects.get(adharNumber=request.POST['adharNumber'])
+        #     return render(request,'patients/patientSignUpPage.html',{'adharNumberError':"Patient with this Adhar number already exist"})
+        # except:
+        #     mobileNumber = request.POST['mobileNumber']
+        #     if len(str(mobileNumber)) != 10 :
+        #         return render(request,'patients/patientSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
+        #     else:
+        #         if forms.is_valid():
+        #             forms.save()
+        #             # context = {'data':data}
+        #             return render(request,'patients/patientPrescriptionPage.html')
+        #         else:
+        #             return render(request,'patients/patientSignUpPage.html')
+    else:
+        return render(request,'patients/patientSignUpPage.html')
+
+def patient_Login_Page(request):
+    if request.method == "POST":
+        adharNumber = request.POST['adharNumber']
+        if(adharNumber != patientModel.objects.get(adharNumber=adharNumber)):
+            return redirect(patient_SignUp_Page,{'adharNumberError':"Patient with this Adhar number doesnot exist"})
+        else:
+            patient = patientModel.objects.get(adharNumber=adharNumber)
+            context = {'patient':patient}
+            return render(request,'patients/patientPrescriptionPage.html',context)
+    else:
+        return render(request,'patients/patientLoginPage.html')
