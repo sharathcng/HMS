@@ -44,6 +44,33 @@
                         <td style="font-weight: bold;" class="text-left">Place:</td>
                         <td class="text-left">{{ d.place }}</td>
                     </tr>
+                    
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Symptoms:</td>
+                        <td class="text-left">
+                            <input list="selectmedic" placeholder="Search Symptoms"/>
+                            <datalist id="selectmedic" style="width:1000px;">
+                                <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
+                                {% for medic in medicineList %}
+                                    <option>{{ medic.drug_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                            <button type="submit" title="Add" class="btn btn-success">Add</button>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Disease:</td>
+                        <td class="text-left">
+                            <input list="selectmedic" placeholder="Search Disease"/>
+                            <datalist id="selectmedic" style="width:1000px;">
+                                <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
+                                {% for medic in medicineList %}
+                                    <option>{{ medic.drug_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                            <button type="submit" title="Add" class="btn btn-success">Add</button>
+                            </td>
+                    </tr>
                     <tr>
                         <td style="font-weight: bold;" class="text-left">Medicines:</td>
                         <td class="text-left">
@@ -57,7 +84,8 @@
                             <button type="submit" title="Add" class="btn btn-success">Add</button>
                             </td>
                     </tr>
-                    <th style="font-weight: bold;" class="text-center">
+                    
+                    {% comment %} <th style="font-weight: bold;" class="text-center">
                         Name
                       </th>
                       <th style="font-weight: bold;" class="text-center">
@@ -65,9 +93,9 @@
                       </th>
                       <th style="font-weight: bold;" class="text-center">
                         NO.of Tablets
-                      </th>
+                      </th> {% endcomment %}
                 </thead>
-                
+
                 <tbody>
                     <tr>
                         <td class="text-left"></td>
