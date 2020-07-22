@@ -48,27 +48,30 @@
                     <tr>
                         <td style="font-weight: bold;" class="text-left">Symptoms:</td>
                         <td class="text-left">
-                            <input list="selectmedic" placeholder="Search Symptoms"/>
+                            <input id="a" name="a" list="selectmedic" placeholder="Search Symptoms" />
                             <datalist id="selectmedic" style="width:1000px;">
                                 <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
                                 {% for medic in medicineList %}
                                     <option>{{ medic.drug_name }}</option>
                                 {% endfor %}
                             </datalist>
-                            <button type="submit" title="Add" class="btn btn-success">Add</button>
+                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('b').value=getElementById('b').value +  getElementById('a').value + ', '  ">Add</button>
+                            <input id="b" name="b" style="width:500px;"/>
                             </td>
+                        
                     </tr>
                     <tr>
                         <td style="font-weight: bold;" class="text-left">Disease:</td>
                         <td class="text-left">
-                            <input list="selectmedic" placeholder="Search Disease"/>
+                            <input list="selectmedic" placeholder="Search Disease" id="aa" name="aa"/>
                             <datalist id="selectmedic" style="width:1000px;">
                                 <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
                                 {% for medic in medicineList %}
                                     <option>{{ medic.drug_name }}</option>
                                 {% endfor %}
                             </datalist>
-                            <button type="submit" title="Add" class="btn btn-success">Add</button>
+                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('bb').value=getElementById('bb').value +  getElementById('aa').value + ', '  ">Add</button>
+                            <input id="bb" name="bb" style="width:500px;"/>
                             </td>
                     </tr>
                     <tr>
@@ -83,17 +86,19 @@
                             </datalist>
                             <button type="submit" title="Add" class="btn btn-success">Add</button>
                             </td>
+                            
                     </tr>
-                    
-                    {% comment %} <th style="font-weight: bold;" class="text-center">
+                    <tr style="width:100px;">
+                     <td style="font-weight: bold;" class="text-center">
                         Name
-                      </th>
-                      <th style="font-weight: bold;" class="text-center">
+                      </td>
+                      <td style="font-weight: bold;" class="text-center">
                         Timing
-                      </th>
-                      <th style="font-weight: bold;" class="text-center">
+                      </td>
+                      <td style="font-weight: bold;" class="text-center">
                         NO.of Tablets
-                      </th> {% endcomment %}
+                      </td> 
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -112,4 +117,13 @@
         {% endfor %}
         <button type="submit" title="Save" class="btn btn-success pull-right">Submit</button>
     </div>    
-{% endblock %}
+
+<script type="java script">
+function show()
+{
+    
+    {% comment %} getElementById('aaa').value
+    getElementById('bbb').value=b+""a {% endcomment %}
+}
+</script>
+{% endblock content %}
