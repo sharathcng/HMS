@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect,reverse
 from django.contrib.auth.models import User
 from django.contrib import auth
-from . models import extendedUser,patientModel
-from pharmacy.models import medicines
+from . models import extendedUser,patientModel,patientSymptomsModel
+from pharmacy.models import medicines,symptoms
 from doctor.forms import PatientRegisterForms
 from django.contrib.auth.decorators import login_required
 
@@ -92,3 +92,7 @@ def patient_Login_Page(request):
             return redirect(patient_SignUp_Page)
     else:
         return render(request,'patients/patientLoginPage.html')
+
+def add_symptom(request):
+    patientSymptomsModel.objects.create(symptom_name=request.POST['symptom'])
+    return JsonResponse('')

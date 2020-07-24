@@ -17,3 +17,7 @@ class patientModel(models.Model):
     mobileNumber = models.CharField(max_length = 15)
     place = models.CharField(max_length = 15)
     gender = models.CharField(max_length = 10)
+
+class patientSymptomsModel(models.Model):
+    # adharNumber = models.BigIntegerField()
+    symptom_name = models.CharField(max_length=255)

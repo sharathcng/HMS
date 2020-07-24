@@ -1,30 +1,159 @@
+<!DOCTYPE html>
 {% extends 'homebase.html' %}
 {% load static %}
 
 {% block content %}
-
-
-{% for d in patient %}
-    <div><h2>{{ d.firstname }}<h4>{{ d.careof }}</h4><h2>{{ d.lastname }}</h2></div>
-    <h3>{{ d.age }}</h3>
-    <h3>{{ d.weight }}</h3>
-    <h3>{{ d.gender }}</h3>
-    <h3>{{ d.mobileNumber }}</h3>
-    <h3>{{ d.place }}</h3>
-{% endfor %}
-
-
+    <section class="breadcrumbs">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Prescription</h2>
+          <ol>
+            <li><a href="{% url 'drDashboard' %}">Home</a></li>
+            <li><a href="{% url 'drDashboard' %}">Innerpage</a></li>
+          </ol>
+        </div>
+      </div>
+    </section><!-- End Breadcrumbs Section -->
 {% csrf_token %}
-           <center>
-               <h1> Search and select Medicines </h1>
-               <hr/>
-               <input list="selectmedic" placeholder="Search Medicines"/>
-               <datalist id="selectmedic" style="width:1000px;">
-                   <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
-                   {% for medic in medicineList %}
-                   <option>{{ medic.drug_name }}</option>
-                   {% endfor %}
-               </datalist>
-           </center>
+    
+    <div class="table-responsive">
+        {% for d in patient %}
+            <table class="table table-hover">
+                <thead class="">
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Name:</td>
+                        <td class="text-left">{{ d.firstname }} {{d.careof}} {{ d.lastname }}</td>    
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">AdharNumber:</td>
+                        <td id="adhar" class="text-left">{{ d.adharNumber }}</td>    
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">sex:</td>
+                        <td class="text-left">{{ d.gender }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Age:</td>
+                        <td class="text-left">{{ d.age }}</td>    
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Weight:</td>
+                        <td class="text-left">{{ d.weight }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Moblie Number:</td>
+                        <td class="text-left">{{ d.mobileNumber }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Place:</td>
+                        <td class="text-left">{{ d.place }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Symptoms:</td>
+                        <td class="text-left">
+                            <input id="a" name="a" list="selectmedic" placeholder="Search Symptoms" />
+                            <datalist id="selectmedic" style="width:1000px;">
+                                <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
+                                {% for medic in medicineList %}
+                                    <option>{{ medic.drug_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('b').value=getElementById('b').value +  getElementById('a').value + ', '  ">Add</button>
+                            <form method="POST">
+                                <div id="error-list">
+                            {% csrf_token %}
+                            <input id="b" name="b" style="width:500px;"/>
+                            <input type="submit" id="sssss" value="Save">
+                            </div>
+                            </form>
+                            </td>
+                        
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Disease:</td>
+                        <td class="text-left">
+                            <input list="selectmedic" placeholder="Search Disease" id="aa" name="aa"/>
+                            <datalist id="selectmedic" style="width:1000px;">
+                                <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
+                                {% for medic in medicineList %}
+                                    <option>{{ medic.drug_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('bb').value=getElementById('bb').value +  getElementById('aa').value + ', '  ">Add</button>
+                            <input id="bb" name="bb" style="width:500px;" onclick="addSymptom()"/>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Medicines:</td>
+                        <td class="text-left">
+                            <input list="selectmedic" placeholder="Search Medicines"/>
+                            <datalist id="selectmedic" style="width:1000px;">
+                                <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
+                                {% for medic in medicineList %}
+                                    <option>{{ medic.drug_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                            <button type="submit" title="Add" class="btn btn-success">Add</button>
+                            </td>
+                            
+                    </tr>
+                    <tr style="width:100px;">
+                     <td style="font-weight: bold;" class="text-center">
+                        Name
+                      </td>
+                      <td style="font-weight: bold;" class="text-center">
+                        Timing
+                      </td>
+                      <td style="font-weight: bold;" class="text-center">
+                        NO.of Tablets
+                      </td> 
+                    </tr>
+                </thead>
 
-{% endblock %}
+                <tbody>
+                    <tr>
+                        <td class="text-left"></td>
+                        {% comment %} <a type="button" rel="tooltip" title="Edit" class="btn btn-link btn-success edit" href="{% url 'visitors_update' id=visitor.id d=0  %}">
+                        <i class="material-icons">edit</i></a>
+
+                        <a type="submit" rel="tooltip" title="Delete" class="btn btn-link btn-danger remove"
+                        href="{% url 'visitors_update' id=visitor.id d=visitor.id  %}">
+                        <i class="material-icons">delete</i> 
+                        </a>{% endcomment %}            
+                    </tr>    
+                    </tbody>              
+            </table> 
+        {% endfor %}
+        <button type="submit" title="Save" class="btn btn-success pull-right">Submit</button>
+    </div>    
+
+    <script>
+        document
+          .getElementById("sssss")
+          .addEventListener("click", save_data);
+  
+        function save_data() {
+          var token = "{{csrf_token}}";
+          var symp = $("#b").val();
+          //var adhar = $("#adhar").val();
+  
+          $.ajax({
+            type: "POST",
+            headers: { "X-CSRFToken": token },
+            url: "{% url 'addSymptom' %}",
+            data: { symptom: symp },
+  
+            success: function (data) {
+              $("#error-list").html(
+                '<p style="color:brown">Form Successfully Submitted</p>'
+              );
+              console.log(data);
+            },
+            error: function (data) {},
+          });
+        }
+      </script>
+
+{% endblock content %}
+
