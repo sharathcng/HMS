@@ -55,16 +55,16 @@
                             <input id="a" name="a" list="selectmedic" placeholder="Search Symptoms" />
                             <datalist id="selectmedic" style="width:1000px;">
                                 <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
-                                {% for medic in medicineList %}
-                                    <option>{{ medic.drug_name }}</option>
+                                {% for symptom in symptomsList %}
+                                    <option>{{ symptom.symptom_name }}</option>
                                 {% endfor %}
                             </datalist>
-                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('b').value=getElementById('b').value +  getElementById('a').value + ', '  ">Add</button>
+                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('symptom').value=getElementById('symptom').value +  getElementById('a').value + ', '  ">Add</button>
                             <form method="POST">
                                 <div id="error-list">
                             {% csrf_token %}
-                            <input id="b" name="b" style="width:500px;"/>
-                            <input type="submit" id="sssss" value="Save">
+                            <input id="symptom" name="symptom" style="width:500px;"/>
+                            
                             </div>
                             </form>
                             </td>
@@ -76,12 +76,13 @@
                             <input list="selectmedic" placeholder="Search Disease" id="aa" name="aa"/>
                             <datalist id="selectmedic" style="width:1000px;">
                                 <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
-                                {% for medic in medicineList %}
-                                    <option>{{ medic.drug_name }}</option>
+                                {% for symptom in symptomsList %}
+                                    <option>{{ symptom.symptom_name }}</option>
                                 {% endfor %}
                             </datalist>
-                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('bb').value=getElementById('bb').value +  getElementById('aa').value + ', '  ">Add</button>
-                            <input id="bb" name="bb" style="width:500px;" onclick="addSymptom()"/>
+                            <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('disease').value=getElementById('disease').value +  getElementById('aa').value + ', '  ">Add</button>
+                            <input id="disease" name="disease" style="width:500px;"/>
+                            <input type="submit" id="sssss" value="Save"/>
                             </td>
                     </tr>
                     <tr>
@@ -124,7 +125,7 @@
                     </tr>    
                     </tbody>              
             </table> 
-        {% endfor %}
+        
         <button type="submit" title="Save" class="btn btn-success pull-right">Submit</button>
     </div>    
 
@@ -135,14 +136,15 @@
   
         function save_data() {
           var token = "{{csrf_token}}";
-          var symp = $("#b").val();
+          var symp = $("#symptom").val();
+          var disease = $('#disease').val();
           //var adhar = $("#adhar").val();
   
           $.ajax({
             type: "POST",
             headers: { "X-CSRFToken": token },
-            url: "{% url 'addSymptom' %}",
-            data: { symptom: symp },
+            url: "{% url 'addSymptom' d.adharNumber %}",
+            data: { symptom : symp , disease : disease},
   
             success: function (data) {
               $("#error-list").html(
@@ -154,6 +156,6 @@
           });
         }
       </script>
-
+      {% endfor %}
 {% endblock content %}
 

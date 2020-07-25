@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect,reverse
 from django.contrib.auth.models import User
 from django.contrib import auth
-from . models import extendedUser,patientModel,patientSymptomsModel
+from . models import extendedUser,patientModel,patientSymptomsModel,patientDiseasesModel
 from pharmacy.models import medicines,symptoms
 from doctor.forms import PatientRegisterForms
 from django.contrib.auth.decorators import login_required
-
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -86,13 +86,23 @@ def patient_Login_Page(request):
         if patientModel.objects.filter(adharNumber=patient):
             patient = patientModel.objects.filter(adharNumber=patient)
             medicineList = medicines.objects.all()
-            context = {'patient':patient,'medicineList':medicineList}
+            symptomsList = symptoms.objects.all()
+            context = {'patient':patient,'medicineList':medicineList,'symptomsList':symptomsList}
             return render(request,'patients/patientPrescriptionPage.html',context)
         else:
             return redirect(patient_SignUp_Page)
     else:
         return render(request,'patients/patientLoginPage.html')
 
-def add_symptom(request):
-    patientSymptomsModel.objects.create(symptom_name=request.POST['symptom'])
-    return JsonResponse('')
+def add_symptom(request,pk):
+    pAdharNumber = patientModel.objects.get(adharNumber=pk)
+    instance1 = patientSymptomsModel.objects.create(symptom_name=request.POST['symptom'])
+    instance2 = patientDiseasesModel.objects.create(disease_name=request.POST['disease'])
+    instance1.pAdharNumber = pAdharNumber
+    instance2.pAdharNumber = pAdharNumber
+    instance1.save()
+    instance2.save()
+    response = {
+        'adharNumber':pk
+    }
+    return JsonResponse(response)
