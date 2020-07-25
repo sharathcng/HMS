@@ -57,7 +57,7 @@
                             </datalist>
                             <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('b').value=getElementById('b').value +  getElementById('a').value + ', '  ">Add</button>
                             <input id="b" name="b" style="width:500px;"/>
-                            </td>
+                        </td>
                         
                     </tr>
                     <tr>
@@ -72,7 +72,7 @@
                             </datalist>
                             <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('bb').value=getElementById('bb').value +  getElementById('aa').value + ', '  ">Add</button>
                             <input id="bb" name="bb" style="width:500px;"/>
-                            </td>
+                        </td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold;" class="text-left">Medicines:</td>
@@ -85,45 +85,55 @@
                                 {% endfor %}
                             </datalist>
                             <button type="submit" title="Add" class="btn btn-success">Add</button>
-                            </td>
-                            
-                    </tr>
-                    <tr style="width:100px;">
-                     <td style="font-weight: bold;" class="text-center">
-                        Name
-                      </td>
-                      <td style="font-weight: bold;" class="text-center">
-                        Timing
-                      </td>
-                      <td style="font-weight: bold;" class="text-center">
-                        NO.of Tablets
-                      </td> 
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td class="text-left"></td>
-                        {% comment %} <a type="button" rel="tooltip" title="Edit" class="btn btn-link btn-success edit" href="{% url 'visitors_update' id=visitor.id d=0  %}">
-                        <i class="material-icons">edit</i></a>
-
-                        <a type="submit" rel="tooltip" title="Delete" class="btn btn-link btn-danger remove"
-                        href="{% url 'visitors_update' id=visitor.id d=visitor.id  %}">
-                        <i class="material-icons">delete</i> 
-                        </a>{% endcomment %}            
+                        </td>        
                     </tr>    
-                    </tbody>              
+                </thead>
             </table> 
         {% endfor %}
-        <button type="submit" title="Save" class="btn btn-success pull-right">Submit</button>
-    </div>    
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="">
+                    <tr style="width:100px;">
+                        <td style="font-weight: bold;" class="text-center">
+                            Name
+                        </td>
+                        <td style="font-weight: bold;" class="text-center">
+                            Timing
+                        </td>
+                        <td style="font-weight: bold;" class="text-center">
+                            NO.of Tablets
+                        </td> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>          
+                    </tr>    
+                </tbody>              
+            </table           
+        </div>
+    <button type="submit" title="Save" class="btn btn-success pull-right">Submit</button>    
 
 <script type="java script">
 function show()
 {
     
-    {% comment %} getElementById('aaa').value
-    getElementById('bbb').value=b+""a {% endcomment %}
+    // Get table object
+	var myTable = document.getElementById('student_table').tBodies[0];
+         // first loop for each row
+        for (var r=0, n = myTable.rows.length; r < n; r++) {
+                       // this loop is getting each colomn/cells
+			for (var c = 0, m = myTable.rows[r].cells.length; c < m; c++) {
+			   if(myTable.rows[r].cells[c].childNodes[0].value){
+				   	// get student names
+					var StudentName = myTable.rows[r].cells[1].innerHTML;
+					alert(StudentName);
+					// get student marks in each text boxes
+			   		var marks = myTable.rows[r].cells[c].childNodes[0].value;
+			   		alert(marks);
+			   }
+            }
+        }
 }
 </script>
 {% endblock content %}
