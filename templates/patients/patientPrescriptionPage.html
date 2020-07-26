@@ -52,52 +52,66 @@
                     <tr>
                         <td style="font-weight: bold;" class="text-left">Symptoms:</td>
                         <td class="text-left">
-                            <input id="a" name="a" list="selectmedic" placeholder="Search Symptoms" />
-                            <datalist id="selectmedic" style="width:1000px;">
+                            <input id="a" name="a" list="selectsymptom" placeholder="Search Symptoms" />
+                            <datalist id="selectsymptom" style="width:1000px;">
                                 <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
                                 {% for symptom in symptomsList %}
                                     <option>{{ symptom.symptom_name }}</option>
                                 {% endfor %}
                             </datalist>
                             <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('symptom').value=getElementById('symptom').value +  getElementById('a').value + ', '  ">Add</button>
-                            <form method="POST">
-                                <div id="error-list">
+                            <br>
+                            <form method="POST">                                
                             {% csrf_token %}
                             <input id="symptom" name="symptom" style="width:500px;"/>
-                            
+                        </form>
                             </div>
-                            </form>
+                            
                             </td>
                         
                     </tr>
                     <tr>
                         <td style="font-weight: bold;" class="text-left">Disease:</td>
                         <td class="text-left">
-                            <input list="selectmedic" placeholder="Search Disease" id="aa" name="aa"/>
-                            <datalist id="selectmedic" style="width:1000px;">
+                            <input list="selectdisease" placeholder="Search Disease" id="aa" name="aa"/>
+                            <datalist id="selectdisease" style="width:1000px;">
                                 <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
                                 {% for symptom in symptomsList %}
                                     <option>{{ symptom.symptom_name }}</option>
                                 {% endfor %}
                             </datalist>
                             <button type="submit" title="Add" class="btn btn-success" onclick="getElementById('disease').value=getElementById('disease').value +  getElementById('aa').value + ', '  ">Add</button>
+                            <br>
                             <input id="disease" name="disease" style="width:500px;"/>
+                        
                             <input type="submit" id="sssss" value="Save"/>
+                            <div id="error-list"></div>
+                        
                             </td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold;" class="text-left">Medicines:</td>
                         <td class="text-left">
-                            <input list="selectmedic" placeholder="Search Medicines"/>
-                            <datalist id="selectmedic" style="width:1000px;">
+                            <input list="selectmedicines" placeholder="Search Medicine" id="medici" name="medici"/>
+                            <datalist id="selectmedicines" style="width:1000px;">
                                 <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
-                                {% for medic in medicineList %}
+                                {% for medic in medicine %}
                                     <option>{{ medic.drug_name }}</option>
                                 {% endfor %}
                             </datalist>
-                            <button type="submit" title="Add" class="btn btn-success">Add</button>
+                                <input type="checkbox" id="morning" name="morning" value="morning">
+                                <label for="morning">Morning</label>
+                                <input type="checkbox" id="afternoon" name="afternoon" value="afternoon">
+                                <label for="afternoon">Afternoon</label>
+                                <input type="checkbox" id="night" name="night" value="night">
+                                <label for="night">Night</label>
+                                &nbsp;&nbsp;
+                                Count<input type="number" id="count" name="count" value="10" style="width: 50px;"/>
+                            <button type="submit" id="addMedic" title="Add" class="btn btn-success">Add</button>
+                            <!-- <input type="submit" id="sssss" value="Save"/> -->
+                            <div id="error-list1"></div>
+                        
                             </td>
-                            
                     </tr>
                     <tr style="width:100px;">
                      <td style="font-weight: bold;" class="text-center">
@@ -148,7 +162,7 @@
   
             success: function (data) {
               $("#error-list").html(
-                '<p style="color:brown">Form Successfully Submitted</p>'
+                '<p style="color:brown">Symptoms and diseases Successfully added</p>'
               );
               console.log(data);
             },
@@ -156,6 +170,59 @@
           });
         }
       </script>
+
+
+      <script>
+        document
+          .getElementById("addMedic")
+          .addEventListener("click", save_data);
+          
+        function save_data() {
+          var token = "{{csrf_token}}";
+          var medici = $('#medici').val();
+          var mor = document.getElementById("morning").checked;
+          var aft = document.getElementById("afternoon").checked;
+          var nit = document.getElementById("night").checked;
+          var count = $('#count').val();
+
+          if(mor == true){
+            var morning = $('#morning').val();
+          }
+          else{
+            var morning = null;
+          }
+
+          if(aft == true){
+            var afternoon = $('#afternoon').val();
+          }
+          else{
+            var afternoon = null;
+          }
+
+          if(nit == true){
+            var night = $('#night').val();
+          }
+          else{
+            var night = null;
+          }
+
+          $.ajax({
+            type: "POST",
+            headers: { "X-CSRFToken": token },
+            url: "{% url 'addMedicines' d.adharNumber %}",
+            data: { medici : medici, morning : morning, afternoon : afternoon, night : night, count : count},
+  
+            success: function (data) {
+              $("#error-list1").html(
+                '<p style="color:brown">Medicines Successfully added</p>'
+              );
+              console.log(data);
+            },
+            error: function (data) {},
+          });
+        }
+      </script>
+
       {% endfor %}
 {% endblock content %}
 

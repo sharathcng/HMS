@@ -19,12 +19,17 @@ class patientModel(models.Model):
     place = models.CharField(max_length = 15)
     gender = models.CharField(max_length = 10)
 
-class patientSymptomsModel(models.Model):
+class patientSymptomsDiseaseModel(models.Model):
     pAdharNumber = models.ForeignKey(patientModel,on_delete=models.CASCADE,null=True,blank=True)
     symptom_name = models.CharField(max_length=255)
+    disease_name = models.CharField(max_length=255)
     date=models.DateField(auto_now_add=True)
 
-class patientDiseasesModel(models.Model):
+class patientMedicineModel(models.Model):
     pAdharNumber = models.ForeignKey(patientModel,on_delete=models.CASCADE,null=True,blank=True)
-    disease_name = models.CharField(max_length=255)
+    medicine_name = models.CharField(max_length=255)
+    medicine_count = models.IntegerField()
+    mor = models.CharField(max_length=255, default='null')
+    aft = models.CharField(max_length=255, default='null')
+    nit = models.CharField(max_length=255, default='null')
     date=models.DateField(auto_now_add=True)

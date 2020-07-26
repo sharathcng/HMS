@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect,reverse
 from django.contrib.auth.models import User
 from django.contrib import auth
-from . models import extendedUser,patientModel,patientSymptomsModel,patientDiseasesModel
+from . models import extendedUser,patientModel,patientSymptomsDiseaseModel,patientMedicineModel
 from pharmacy.models import medicines,symptoms
 from doctor.forms import PatientRegisterForms
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from datetime import date
 
 # Create your views here.
 
@@ -85,9 +86,10 @@ def patient_Login_Page(request):
         patient = request.POST['adharNumber']
         if patientModel.objects.filter(adharNumber=patient):
             patient = patientModel.objects.filter(adharNumber=patient)
-            medicineList = medicines.objects.all()
+            medicine = medicines.objects.all()
             symptomsList = symptoms.objects.all()
-            context = {'patient':patient,'medicineList':medicineList,'symptomsList':symptomsList}
+            # todaysmedicines =  patientMedicineModel.objects.filter(date = date.today())
+            context = {'patient':patient,'medicine':medicine,'symptomsList':symptomsList}
             return render(request,'patients/patientPrescriptionPage.html',context)
         else:
             return redirect(patient_SignUp_Page)
@@ -96,12 +98,27 @@ def patient_Login_Page(request):
 
 def add_symptom(request,pk):
     pAdharNumber = patientModel.objects.get(adharNumber=pk)
-    instance1 = patientSymptomsModel.objects.create(symptom_name=request.POST['symptom'])
-    instance2 = patientDiseasesModel.objects.create(disease_name=request.POST['disease'])
-    instance1.pAdharNumber = pAdharNumber
-    instance2.pAdharNumber = pAdharNumber
-    instance1.save()
-    instance2.save()
+    instance = patientSymptomsDiseaseModel.objects.create(symptom_name=request.POST['symptom'],disease_name=request.POST['disease'])
+    instance.pAdharNumber = pAdharNumber
+    instance.save()
+    response = {
+        'adharNumber':pk
+    }
+    return JsonResponse(response)
+
+
+def add_medicines(request,pk):
+    pAdharNumber = patientModel.objects.get(adharNumber=pk)
+    instance = patientMedicineModel.objects.create(
+        medicine_name=request.POST['medici'],
+        mor=request.POST['morning'],
+        aft=request.POST['afternoon'],
+        nit=request.POST['night'],
+        medicine_count=request.POST['count']
+        )
+        
+    instance.pAdharNumber = pAdharNumber
+    instance.save()
     response = {
         'adharNumber':pk
     }
