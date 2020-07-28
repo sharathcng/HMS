@@ -99,11 +99,11 @@
                                     <option>{{ medic.drug_name }}</option>
                                 {% endfor %}
                             </datalist>
-                                <input type="checkbox" id="morning" name="morning" value="morning">
+                                <input type="checkbox" id="morning" name="morning" value="Yes">
                                 <label for="morning">Morning</label>
-                                <input type="checkbox" id="afternoon" name="afternoon" value="afternoon">
+                                <input type="checkbox" id="afternoon" name="afternoon" value="Yes">
                                 <label for="afternoon">Afternoon</label>
-                                <input type="checkbox" id="night" name="night" value="night">
+                                <input type="checkbox" id="night" name="night" value="Yes">
                                 <label for="night">Night</label>
                                 &nbsp;&nbsp;
                                 Count<input type="number" id="count" name="count" value="10" style="width: 50px;"/>
@@ -115,30 +115,30 @@
                     </tr>
                 </thead>
                 </table>
-        <h3>USERS</h3>
-        <table id="userTable" class="table table-striped">
+        <h3>Prescriptions :</h3>
+        <table id="medicineTable" class="table table-striped">
           <tr>
             <th>Name</th>
-            <th>count</th>
-            <th >mor</th>
-            <th >aft</th>
-            <th >nit</th>
+            <th>Count</th>
+            <th >Morning</th>
+            <th >Afternoon</th>
+            <th >Night</th>
             <th></th>
             <th></th>
           </tr>
           {% if todaysmedicines %}
           {% for medi in todaysmedicines %}
-          <tr id="user-{{medi.id}}">
+          <tr id="medicine-{{medi.id}}">
               <td class="mediName userData" name="name">{{medi.medicine_name}}</td>
               <td class="mediCount userData" name="count">{{medi.medicine_count}}</td>
               <td class="mediMor userData" name="mor">{{medi.mor}}</td>
               <td class="mediAft userData" name="aft">{{medi.aft}}</td>
               <td class="mediNit userData" name="it">{{medi.nit}}</td>
-              <td align="center">
+              <!-- <td align="center">
                   <button class="btn btn-success form-control" onClick="editUser({{medi.id}})" data-toggle="modal" data-target="#myModal")>EDIT</button>
-              </td>
+              </td> -->
               <td align="center">
-                  <button class="btn btn-danger form-control" onClick="deleteUser({{medi.id}})">DELETE</button>
+                  <button class="btn btn-danger form-control" onClick="deleteMedicine({{medi.id}})">DELETE</button>
               </td>
           </tr>
           {% endfor %}
@@ -196,21 +196,21 @@
             var morning = $('#morning').val();
           }
           else{
-            var morning = null;
+            var morning = "No";
           }
 
           if(aft == true){
             var afternoon = $('#afternoon').val();
           }
           else{
-            var afternoon = null;
+            var afternoon = "No";
           }
 
           if(nit == true){
             var night = $('#night').val();
           }
           else{
-            var night = null;
+            var night = "No";
           }
 
           $.ajax({
@@ -229,8 +229,8 @@
     }
 
     function appendToMediTable(medi) {
-        $("#userTable > tbody:last-child").append(`
-              <tr id="user-${medi.id}">
+        $("#medicineTable > tbody:last-child").append(`
+              <tr id="medicine-${medi.id}">
                   <td class="mediName" name="name">${medi.name}</td>
                   '<td class="mediCount" name="count">${medi.count}</td>
                   '<td class="mediMor" name="mor">${medi.mor}</td>
@@ -246,6 +246,29 @@
             `);
       }
             
+    </script>
+
+
+    <script>
+        function deleteMedicine(id) {
+            var action = confirm("Are you sure you want to delete this medicine?");
+            if (action != false) {
+              $.ajax({
+                type: "POST",
+                headers: { "X-CSRFToken": token },
+                url: '{% url "delete_Medicines" d.adharNumber %}',
+                data: {
+                      id: id,
+                  },
+                  dataType: 'json',
+                  success: function (data) {
+                      if (data.deleted) {
+                        $("#medicineTable #medicine-" + id).remove();
+                      }
+                  }
+              });
+            }
+          }
     </script>
 
       {% endfor %}

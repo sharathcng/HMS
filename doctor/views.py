@@ -126,3 +126,11 @@ def add_medicines(request,pk):
         'medi':medi
     }
     return JsonResponse(data)
+
+def delete_medicines(request,pk):
+    patientMedicineModel.objects.delete(id = request.POST['id'])
+    data = {
+        'adharNumber':pk,
+        'deleted': True
+    }
+    return JsonResponse(data)
