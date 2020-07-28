@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign Up Form by Colorlib</title>
+    <title>Patient Appointment</title>
 
     <!-- Font Icon -->
     <link rel="stylesheet" href="{% static 'register/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
@@ -25,7 +25,7 @@
                         {% csrf_token %}
                         <h2 class="form-title">Create account</h2>
                         <div class="form-group">
-                            <input type="number" class="form-input" name="adharNumber" id="adharNumber" placeholder="Username"/>
+                            <input type="number" class="form-input" name="adharNumber" id="adharNumber" placeholder="AdharNumber"/>
                         </div>
                         {% if userNameError %}
                         <h4>{{ userNameError }}</h4>
@@ -35,11 +35,11 @@
                         </div>
                         <div class="form-group">
                             <select name="careof" class="label">
-                                <option value="co">c/o</option>
-                                <option value="wo">w/o</option>
-                                <option value="ho">h/o</option>
-                                <option value="so">s/o</option>
-                                <option value="do">d/o</option>
+                                <option value="c/o">c/o</option>
+                                <option value="w/o">w/o</option>
+                                <option value="h/o">h/o</option>
+                                <option value="s/o">s/o</option>
+                                <option value="d/o">d/o</option>
                               </select>
                         </div>
                         <div class="form-group">
@@ -70,11 +70,11 @@
                             </label>   
                         </div>
                         <div class="form-group">
-                            <input type="submit" name="submit" id="submit" class="form-submit" value="Sign up"/>
+                            <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>
                         </div>
                     </form>
                     <p class="loginhere">
-                        Have already an account ? <a href="{% url 'patientLoginPage' %}" class="loginhere-link">Login here</a>
+                        Have already Appointed ? <a href="{% url 'patientLoginPage' %}" class="loginhere-link">View here...</a>
                     </p>
                 </div>
             </div>
