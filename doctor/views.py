@@ -128,7 +128,7 @@ def add_medicines(request,pk):
     return JsonResponse(data)
 
 def delete_medicines(request,pk):
-    patientMedicineModel.objects.delete(id = request.POST['id'])
+    patientMedicineModel.objects.filter(id = request.POST['id']).delete()
     data = {
         'adharNumber':pk,
         'deleted': True

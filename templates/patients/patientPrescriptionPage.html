@@ -108,7 +108,7 @@
                                 &nbsp;&nbsp;
                                 Count<input type="number" id="count" name="count" value="10" style="width: 50px;"/>
                             <button type="submit" id="addMedic" title="Add" class="btn btn-success">Add</button>
-                            <!-- <input type="submit" id="sssss" value="Save"/> -->
+                            
                             <div id="error-list1"></div>
                         
                             </td>
@@ -223,9 +223,11 @@
             success: function (data) {
               if(data.medi){
                   appendToMediTable(data.medi);
+                  
               }
             }
         });
+        
     }
 
     function appendToMediTable(medi) {
@@ -236,11 +238,9 @@
                   '<td class="mediMor" name="mor">${medi.mor}</td>
                   '<td class="mediAft" name="aft">${medi.aft}</td>
                   '<td class="mediNit" name="nit">${medi.nit}</td>
-                  '<td align="center">
-                      <button class="btn btn-success form-control" onClick="editUser(${medi.id})" data-toggle="modal" data-target="#myModal")">EDIT</button>
-                  </td>
+                  
                   <td align="center">
-                      <button class="btn btn-danger form-control" onClick="deleteUser(${medi.id})">DELETE</button>
+                      <button class="btn btn-danger form-control" onClick="deleteMedicine(${medi.id})">DELETE</button>
                   </td>
               </tr>
             `);
@@ -252,16 +252,17 @@
     <script>
         function deleteMedicine(id) {
             var action = confirm("Are you sure you want to delete this medicine?");
+            var token = "{{csrf_token}}";
             if (action != false) {
               $.ajax({
                 type: "POST",
                 headers: { "X-CSRFToken": token },
                 url: '{% url "delete_Medicines" d.adharNumber %}',
                 data: {
-                      id: id,
+                      id: id
                   },
-                  dataType: 'json',
-                  success: function (data) {
+                dataType: 'json',
+                success: function (data) {
                       if (data.deleted) {
                         $("#medicineTable #medicine-" + id).remove();
                       }
