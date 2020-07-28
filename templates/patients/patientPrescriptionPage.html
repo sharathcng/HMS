@@ -3,13 +3,14 @@
 {% load static %}
 
 {% block content %}
+{% for d in patient %}
     <section class="breadcrumbs">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
           <h2>Prescription</h2>
           <ol>
             <li></li>
-            <li><a href="#">History</a></li>
+            <li><a href="{% url 'patientMedhistory' d.adharNumber %}">History</a></li>
           </ol>
         </div>
       </div>
@@ -17,7 +18,6 @@
 {% csrf_token %}
     
     <div class="table-responsive">
-        {% for d in patient %}
             <table class="table table-hover">
                 <thead class="">
                     <tr>
@@ -277,6 +277,6 @@
           }
     </script>
 
-      {% endfor %}
+  {% endfor %}
 {% endblock content %}
 

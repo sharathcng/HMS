@@ -96,6 +96,19 @@ def patient_Login_Page(request):
     else:
         return render(request,'patients/patientLoginPage.html')
 
+
+def patientMedhistory(request,id):
+    if patientModel.objects.filter(adharNumber=id):
+        patient = patientModel.objects.filter(adharNumber=id)
+        medicine = medicines.objects.all()
+        symptomsList = symptoms.objects.all()
+        todaysmedicines = patientMedicineModel.objects.filter(date=date.today())
+        context = {'patient': patient, 'medicine': medicine,
+                'symptomsList': symptomsList, 'todaysmedicines': todaysmedicines}
+        return render(request, 'patients/patientMedicinehistoryPage.html',context)
+    
+
+
 def add_symptom(request,pk):
     pAdharNumber = patientModel.objects.get(adharNumber=pk)
     instance = patientSymptomsDiseaseModel.objects.create(symptom_name=request.POST['symptom'],disease_name=request.POST['disease'])
