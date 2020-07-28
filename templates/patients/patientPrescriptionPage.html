@@ -113,32 +113,39 @@
                         
                             </td>
                     </tr>
-                    <tr style="width:100px;">
-                     <td style="font-weight: bold;" class="text-center">
-                        Name
-                      </td>
-                      <td style="font-weight: bold;" class="text-center">
-                        Timing
-                      </td>
-                      <td style="font-weight: bold;" class="text-center">
-                        NO.of Tablets
-                      </td> 
-                    </tr>
                 </thead>
-
-                <tbody>
-                    <tr>
-                        <td class="text-left"></td>
-                        {% comment %} <a type="button" rel="tooltip" title="Edit" class="btn btn-link btn-success edit" href="{% url 'visitors_update' id=visitor.id d=0  %}">
-                        <i class="material-icons">edit</i></a>
-
-                        <a type="submit" rel="tooltip" title="Delete" class="btn btn-link btn-danger remove"
-                        href="{% url 'visitors_update' id=visitor.id d=visitor.id  %}">
-                        <i class="material-icons">delete</i> 
-                        </a>{% endcomment %}            
-                    </tr>    
-                    </tbody>              
-            </table> 
+                </table>
+        <h3>USERS</h3>
+        <table id="userTable" class="table table-striped">
+          <tr>
+            <th>Name</th>
+            <th>count</th>
+            <th >mor</th>
+            <th >aft</th>
+            <th >nit</th>
+            <th></th>
+            <th></th>
+          </tr>
+          {% if todaysmedicines %}
+          {% for medi in todaysmedicines %}
+          <tr id="user-{{medi.id}}">
+              <td class="mediName userData" name="name">{{medi.medicine_name}}</td>
+              <td class="mediCount userData" name="count">{{medi.medicine_count}}</td>
+              <td class="mediMor userData" name="mor">{{medi.mor}}</td>
+              <td class="mediAft userData" name="aft">{{medi.aft}}</td>
+              <td class="mediNit userData" name="it">{{medi.nit}}</td>
+              <td align="center">
+                  <button class="btn btn-success form-control" onClick="editUser({{medi.id}})" data-toggle="modal" data-target="#myModal")>EDIT</button>
+              </td>
+              <td align="center">
+                  <button class="btn btn-danger form-control" onClick="deleteUser({{medi.id}})">DELETE</button>
+              </td>
+          </tr>
+          {% endfor %}
+          {% else %}
+            No medicine
+          {% endif %}
+        </table>
         
         <button type="submit" title="Save" class="btn btn-success pull-right">Submit</button>
     </div>    
@@ -169,10 +176,10 @@
             error: function (data) {},
           });
         }
-      </script>
+    </script>
 
 
-      <script>
+    <script>
         document
           .getElementById("addMedic")
           .addEventListener("click", save_data);
@@ -211,17 +218,35 @@
             headers: { "X-CSRFToken": token },
             url: "{% url 'addMedicines' d.adharNumber %}",
             data: { medici : medici, morning : morning, afternoon : afternoon, night : night, count : count},
-  
+
+            dataType : 'json',
             success: function (data) {
-              $("#error-list1").html(
-                '<p style="color:brown">Medicines Successfully added</p>'
-              );
-              console.log(data);
-            },
-            error: function (data) {},
-          });
-        }
-      </script>
+              if(data.medi){
+                  appendToMediTable(data.medi);
+              }
+            }
+        });
+    }
+
+    function appendToMediTable(medi) {
+        $("#userTable > tbody:last-child").append(`
+              <tr id="user-${medi.id}">
+                  <td class="mediName" name="name">${medi.name}</td>
+                  '<td class="mediCount" name="count">${medi.count}</td>
+                  '<td class="mediMor" name="mor">${medi.mor}</td>
+                  '<td class="mediAft" name="aft">${medi.aft}</td>
+                  '<td class="mediNit" name="nit">${medi.nit}</td>
+                  '<td align="center">
+                      <button class="btn btn-success form-control" onClick="editUser(${medi.id})" data-toggle="modal" data-target="#myModal")">EDIT</button>
+                  </td>
+                  <td align="center">
+                      <button class="btn btn-danger form-control" onClick="deleteUser(${medi.id})">DELETE</button>
+                  </td>
+              </tr>
+            `);
+      }
+            
+    </script>
 
       {% endfor %}
 {% endblock content %}

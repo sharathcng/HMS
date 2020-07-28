@@ -88,8 +88,8 @@ def patient_Login_Page(request):
             patient = patientModel.objects.filter(adharNumber=patient)
             medicine = medicines.objects.all()
             symptomsList = symptoms.objects.all()
-            # todaysmedicines =  patientMedicineModel.objects.filter(date = date.today())
-            context = {'patient':patient,'medicine':medicine,'symptomsList':symptomsList}
+            todaysmedicines =  patientMedicineModel.objects.filter(date = date.today())
+            context = {'patient':patient,'medicine':medicine,'symptomsList':symptomsList,'todaysmedicines':todaysmedicines}
             return render(request,'patients/patientPrescriptionPage.html',context)
         else:
             return redirect(patient_SignUp_Page)
@@ -116,10 +116,13 @@ def add_medicines(request,pk):
         nit=request.POST['night'],
         medicine_count=request.POST['count']
         )
+    
+    medi = {'id':instance.id, 'name':instance.medicine_name, 'count':instance.medicine_count,'mor':instance.mor,'aft':instance.aft,'nit':instance.nit}
         
     instance.pAdharNumber = pAdharNumber
     instance.save()
-    response = {
-        'adharNumber':pk
+    data = {
+        'adharNumber':pk,
+        'medi':medi
     }
-    return JsonResponse(response)
+    return JsonResponse(data)
