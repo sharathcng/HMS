@@ -15,3 +15,6 @@ class medicines(models.Model):
 
 class symptoms(models.Model):
     symptom_name = models.CharField(max_length=255)
+
+class diseases(models.Model):
+    disease_name = models.CharField(max_length=255)

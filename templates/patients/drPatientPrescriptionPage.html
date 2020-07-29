@@ -75,8 +75,8 @@
                         <td class="text-left">
                           <input list="selectdisease" placeholder="Search Disease" id="aa" name="aa"/>
                           <datalist id="selectdisease" style="width:1000px;">
-                            {% for symptom in symptomsList %}
-                              <option>{{ symptom.symptom_name }}</option>
+                            {% for disease in diseasesList %}
+                              <option>{{ disease.disease_name }}</option>
                             {% endfor %}
                           </datalist>
                           <button type="submit" onclick="getElementById('disease').value=getElementById('disease').value +  getElementById('aa').value + ', '  ">Add</button>

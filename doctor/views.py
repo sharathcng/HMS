@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,reverse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from . models import extendedUser,patientModel,patientSymptomsDiseaseModel,patientMedicineModel
-from pharmacy.models import medicines,symptoms
+from pharmacy.models import medicines,symptoms,diseases
 from doctor.forms import PatientRegisterForms
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -88,8 +88,9 @@ def patient_Login_Page(request):
             patient = patientModel.objects.filter(adharNumber=patient)
             medicine = medicines.objects.all()
             symptomsList = symptoms.objects.all()
+            diseasesList = diseases.objects.all()
             todaysmedicines =  patientMedicineModel.objects.filter(date = date.today())
-            context = {'patient':patient,'medicine':medicine,'symptomsList':symptomsList,'todaysmedicines':todaysmedicines}
+            context = {'patient':patient,'medicine':medicine,'symptomsList':symptomsList,'todaysmedicines':todaysmedicines,'diseasesList':diseasesList}
             return render(request,'patients/drPatientPrescriptionPage.html',context)
         else:
             return redirect(patient_SignUp_Page)
