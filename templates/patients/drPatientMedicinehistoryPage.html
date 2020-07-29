@@ -33,15 +33,7 @@
               <td class="text-center">{{medi.aft}}</td>
               <td class="text-center">{{medi.nit}}</td>
             </tr>
-              {% comment %} <td class="td-actions text-center pull-center">
-                <a type="button" rel="tooltip" title="Edit" class="btn btn-link btn-success  edit" href="{% url 'bookir_update' a=user.id d=0 %}">
-                <i class="material-icons">edit</i>
-                </a>
-                <a type="button" rel="tooltip" title="Delete" href="{% url 'bookir_update' a=user.id d=user.id %}" class="btn btn-link btn-danger remove">
-                  <i class="material-icons">delete</i>
-                </a> 
-
-              </td>{% endcomment %}  
+               
           {% endfor %} 
         </tbody>
       </table>

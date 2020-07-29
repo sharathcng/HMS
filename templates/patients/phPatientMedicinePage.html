@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% extends 'pharmacybase.html' %}
+{% load static %}
+
+{% block content %}
+{% for d in patient %}
+    <section class="breadcrumbs">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Prescription</h2>
+          <ol>
+            <li></li>
+            <li><a href="{% url 'phPatientMedhistory' d.adharNumber %}">History</a></li>
+          </ol>
+        </div>
+      </div>
+    </section><!-- End Breadcrumbs Section -->
+{% csrf_token %}
+    
+    <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="">
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Name:</td>
+                        <td class="text-left">{{ d.firstname }} {{d.careof}} {{ d.lastname }}</td>    
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">AdharNumber:</td>
+                        <td id="adhar" class="text-left">{{ d.adharNumber }}</td>    
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">sex:</td>
+                        <td class="text-left">{{ d.gender }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Age:</td>
+                        <td class="text-left">{{ d.age }}</td>    
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Weight:</td>
+                        <td class="text-left">{{ d.weight }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Moblie Number:</td>
+                        <td class="text-left">{{ d.mobileNumber }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Place:</td>
+                        <td class="text-left">{{ d.place }}</td>
+                    </tr>
+                    
+    
+
+                    <tr>
+                        <td style="font-weight: bold;" class="text-left">Medicines:</td>
+                        <td class="text-left">
+                            <input list="selectmedicines" placeholder="Search Medicine" id="medici" name="medici"/>
+                            <datalist id="selectmedicines" style="width:1000px;">
+                                <!--<option selected disabled = "true">&#45;&#45;select&#45;&#45;</option>-->
+                                {% for medic in medicine %}
+                                    <option>{{ medic.drug_name }}</option>
+                                {% endfor %}
+                            </datalist>
+                          </td>
+                    </tr>
+                </thead>
+                </table>
+        <h3>Prescriptions :</h3>
+        <table id="medicineTable" class="table table-striped">
+          <tr>
+            <th>Name</th>
+            <th>Count</th>
+            <th >Morning</th>
+            <th >Afternoon</th>
+            <th >Night</th>
+            <th></th>
+            <th></th>
+          </tr>
+          {% if todaysmedicines %}
+          {% for medi in todaysmedicines %}
+          <tr id="medicine-{{medi.id}}">
+              <td class="mediName userData" name="name">{{medi.medicine_name}}</td>
+              <td class="mediCount userData" name="count">{{medi.medicine_count}}</td>
+              <td class="mediMor userData" name="mor">{{medi.mor}}</td>
+              <td class="mediAft userData" name="aft">{{medi.aft}}</td>
+              <td class="mediNit userData" name="it">{{medi.nit}}</td>
+              <td align="center">
+                <input type="checkbox" id="yes" name="yes" value="Yes">
+                <label for="morning">Available</label>
+              </td>
+          </tr>
+          {% endfor %}
+      {% else %}
+        No medicine
+      {% endif %}
+        </table>
+        <div align="center">
+          <a class="btn btn-sm" href="{% url 'prescriptionView' d.adharNumber %}">
+            <button  type="submit" title="Save" class="btn btn-success pull-right">View</button>
+          </a>
+        </div>
+      
+
+  {% endfor %}
+{% endblock content %}
+

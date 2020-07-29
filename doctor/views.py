@@ -66,20 +66,20 @@ def patient_SignUp_Page(request):
         forms = PatientRegisterForms(request.POST)
         try:
             patient = patientModel.objects.get(adharNumber=request.POST['adharNumber'])
-            return render(request,'patients/patientSignUpPage.html',{'adharNumberError':"Patient with this Adhar number already exist"})
+            return render(request,'patients/drPatientSignUpPage.html',{'adharNumberError':"Patient with this Adhar number already exist"})
         except:
             mobileNumber = request.POST['mobileNumber']
             if len(str(mobileNumber)) != 10 :
-                return render(request,'patients/patientSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
+                return render(request,'patients/drPatientSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
             else:
                 if forms.is_valid():
                     patient = forms.save()
                     context = {'patient':patient}
-                    return render(request,'patients/patientPrescriptionPage.html',context)
+                    return render(request,'patients/drPatientPrescriptionPage.html',context)
                 else:
-                    return render(request,'patients/patientSignUpPage.html')
+                    return render(request,'patients/drPatientSignUpPage.html')
     else:
-        return render(request,'patients/patientSignUpPage.html')
+        return render(request,'patients/drPatientSignUpPage.html')
 
 def patient_Login_Page(request):
     if request.method == "POST":
@@ -90,11 +90,11 @@ def patient_Login_Page(request):
             symptomsList = symptoms.objects.all()
             todaysmedicines =  patientMedicineModel.objects.filter(date = date.today())
             context = {'patient':patient,'medicine':medicine,'symptomsList':symptomsList,'todaysmedicines':todaysmedicines}
-            return render(request,'patients/patientPrescriptionPage.html',context)
+            return render(request,'patients/drPatientPrescriptionPage.html',context)
         else:
             return redirect(patient_SignUp_Page)
     else:
-        return render(request,'patients/patientLoginPage.html')
+        return render(request,'patients/drPatientLoginPage.html')
 
 
 def patientMedhistory(request,id):
@@ -105,7 +105,7 @@ def patientMedhistory(request,id):
         todaysmedicines = patientMedicineModel.objects.filter(date=date.today())
         context = {'patient': patient, 'medicine': medicine,
                 'symptomsList': symptomsList, 'todaysmedicines': todaysmedicines}
-        return render(request, 'patients/patientMedicinehistoryPage.html',context)
+        return render(request, 'patients/drPatientMedicinehistoryPage.html',context)
     
 
 

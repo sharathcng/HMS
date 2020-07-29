@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Patient Appointment</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'register/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'register/css/style.css' %}">
+</head>
+<body>
+
+    <div class="main">
+
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container">
+                <div class="signup-content">
+                    <form method="POST" action="{% url 'drPatientSignUpPage' %}" id="signup-form" class="signup-form">
+                        {% csrf_token %}
+                        <h2 class="form-title">Create account</h2>
+                        <div class="form-group">
+                            <input type="number" class="form-input" name="adharNumber" id="adharNumber" placeholder="AdharNumber"/>
+                        </div>
+                        {% if userNameError %}
+                        <h4>{{ userNameError }}</h4>
+                        {% endif %}
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="firstname" id="firstname" placeholder="First Name"/>
+                        </div>
+                        <div class="form-group">
+                            <select name="careof" class="label">
+                                <option value="c/o">c/o</option>
+                                <option value="w/o">w/o</option>
+                                <option value="h/o">h/o</option>
+                                <option value="s/o">s/o</option>
+                                <option value="d/o">d/o</option>
+                              </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="lastname" id="lastname" placeholder="Last Name"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-input" name="age" id="age" placeholder="age"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-input" name="weight" id="weight" placeholder="weight"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-input" name="mobileNumber" id="mobileNumber" placeholder="Mobile Number"/>
+                        </div>
+                        {% if mobileError %}
+                        <h4>{{ mobileError }}</h4>
+                        {% endif %}
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="place" id="place" placeholder="place"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Gender:             
+                                    <center>
+                                        <input type="radio" name="gender" value="male" style="color:#aaa" >Male
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="radio" name="gender" value="female" style="color:#aaa">Female                                    
+                                    </center>
+                            </label>   
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>
+                        </div>
+                    </form>
+                    <p class="loginhere">
+                        Have already Appointed ? <a href="{% url 'drPatientLoginPage' %}" class="loginhere-link">View here...</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'register/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'register/js/main.js' %}"></script>
+</body>
+</html>

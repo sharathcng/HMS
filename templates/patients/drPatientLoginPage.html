@@ -21,7 +21,7 @@
             <!-- <img src="images/signup-bg.jpg" alt=""> -->
             <div class="container">
                 <div class="signup-content">
-                    <form method="POST" action="{% url 'patientLoginPage' %}" id="signup-form" class="signup-form">
+                    <form method="POST" action="{% url 'drPatientLoginPage' %}" id="signup-form" class="signup-form">
                         {% csrf_token %}
                         <h2 class="form-title">Patient details</h2>
                         <div class="form-group">
@@ -32,7 +32,7 @@
                         </div>
                     </form>
                     <p class="loginhere">
-                        New Patient ? <a href="{% url 'patientSignUpPage' %}" class="loginhere-link">Appoint here...</a>
+                        New Patient ? <a href="{% url 'drPatientSignUpPage' %}" class="loginhere-link">Appoint here...</a>
                     </p>
                 </div>
             </div>
