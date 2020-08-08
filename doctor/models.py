@@ -6,6 +6,7 @@ from datetime import datetime,date
 class extendedUser(models.Model):
     mobileNumber = models.CharField(max_length = 10)
     gender = models.CharField(max_length = 10)
+    aboutMe = models.CharField(max_length = 200)
     user = models.OneToOneField(User,on_delete = models.CASCADE)
     
 class patientModel(models.Model):
@@ -32,4 +33,6 @@ class patientMedicineModel(models.Model):
     mor = models.CharField(max_length=255, default='null')
     aft = models.CharField(max_length=255, default='null')
     nit = models.CharField(max_length=255, default='null')
-    date=models.DateField(auto_now_add=True)
+    date = models.DateField(auto_now_add = True)
+    status = models.CharField(max_length = 50,default='null')
+    count = models.CharField(max_length = 50,default='null')

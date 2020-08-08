@@ -55,14 +55,12 @@
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
 
-      <a href="{% url 'homePage' %}" class="logo mr-auto"><img src="{% static 'assets/img/logo.png' %}" alt=""></a>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <h1 class="logo mr-auto"><a href="index.html">Medicio</a></h1> -->
+      <a href="{% url 'homePage' %}" class="logo mr-auto"><img src="{% static 'assets/img/logo.png' %}" alt="" ></a>
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="{% url 'drDashboard' %}">Home</a></li>
-          <li><a href="#Profile">Profile</a></li>
+          <!-- <li><a href="#Profile">Profile</a></li> -->
           <li><a href="{% url 'drPatientLoginPage' %}">Patients</a></li>
           <li><a href="#Medicines">Medicines</a></li>
           <!-- <li class="drop-down"><a href="">Drop Down</a>

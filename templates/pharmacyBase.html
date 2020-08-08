@@ -62,7 +62,7 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="{% url 'drDashboard' %}">Home</a></li>
-          <li><a href="#Profile">Profile</a></li>
+          <li><a href="{% url 'phProfile' %}">Profile</a></li>
           <li><a href="{% url 'phPatientLoginPage' %}">Patients</a></li>
           <li><a href="#Medicines">Medicines</a></li>
           <!-- <li class="drop-down"><a href="">Drop Down</a>
@@ -87,7 +87,7 @@
       </ul>
     </nav><!-- .nav-menu -->
 
-    <a href="{% url 'logout' %}" class="appointment-btn scrollto"><span class="d-none d-md-inline">Logout</span></a>
+    <a href="{% url 'phLogout' %}" class="appointment-btn scrollto"><span class="d-none d-md-inline">Logout</span></a>
 
     </div>
   </header><!-- End Header -->
@@ -99,7 +99,7 @@
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Doctor Login Page</h2>
+          <h2>Pharmacy Login Page</h2>
           <ol>
             <li><a href="{% url 'phDashboard' %}">Home</a></li>
             <li><a href="{% url 'phDashboard' %}">Innerpage</a></li>

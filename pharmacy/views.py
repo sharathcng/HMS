@@ -13,14 +13,22 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from django.views import View
 from xhtml2pdf import pisa
+from HomePage.views import home_page
 
 # Create your views here.
 
-@login_required
+
+@login_required(login_url='phLoginPage')
 def ph_dashboard(request):
     data1 = User.objects.filter(username=request.user)
     data2 = extendedPharmacyUser.objects.filter(user=request.user)
     return render(request,'pharmacy/dashboard.html',{'data1':data1,'data2':data2})
+
+@login_required
+def ph_Profile_Page(request):
+    data1 = User.objects.filter(username=request.user)
+    data2 = extendedPharmacyUser.objects.filter(user=request.user)
+    return render(request,'pharmacy/phProfile.html',{'data1':data1,'data2':data2})
 
 def ph_SignUp_Page(request):
     if request.method == "POST":
@@ -62,7 +70,7 @@ def ph_Login_Page(request):
 
 def logout(request):
     auth.logout(request)
-    return render(request,'hospital/homePage.html')
+    return redirect(home_page)
 
 
 #patient_data
@@ -76,16 +84,16 @@ def patient_SignUp_Page(request):
         except:
             mobileNumber = request.POST['mobileNumber']
             if len(str(mobileNumber)) != 10 :
-                return render(request,'patients/patientSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
+                return render(request,'patients/phPatientSignUpPage.html',{'mobileError':"Mobile number must be 10 digits"})
             else:
                 if forms.is_valid():
                     patient = forms.save()
                     context = {'patient':patient}
-                    return render(request,'patients/patientMedicinePage.html',context)
+                    return render(request,'patients/phPatientMedicinePage.html',context)
                 else:
-                    return render(request,'patients/patientSignUpPage.html')
+                    return render(request,'patients/phPatientSignUpPage.html')
     else:
-        return render(request,'patients/patientSignUpPage.html')
+        return render(request,'patients/phPatientSignUpPage.html')
 
 def patient_Login_Page(request):
     if request.method == "POST":
@@ -129,7 +137,7 @@ def render_to_pdf(template_src, context_dict={}):
 class ViewPDF(View):
 	def get(self, request, *args, **kwargs):
 		patient = patientModel.objects.filter(adharNumber=kwargs['pk'])
-		todaysmedicines = patientMedicineModel.objects.filter(date=date.today(),pAdharNumber=kwargs['pk'])
+		todaysmedicines = patientMedicineModel.objects.filter(date=date.today(),pAdharNumber=kwargs['pk'],status="Available")
 		data = {'patient': patient,'todaysmedicines': todaysmedicines}
 		pdf = render_to_pdf('patients/pdf.html', data)
 		return HttpResponse(pdf, content_type='application/pdf')
@@ -147,4 +155,10 @@ class ViewPDF(View):
 # 		response['Content-Disposition'] = content
 # 		return response
 
+def update_medicines(request,pk):
+    patientMedicineModel.objects.filter(id=pk).update(status=request.POST['status'],count=request.POST['count'])
+    data = {
+        'adharNumber':pk,
+    }
+    return JsonResponse(data)
 

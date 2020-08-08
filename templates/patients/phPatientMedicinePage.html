@@ -84,23 +84,53 @@
               <td class="mediMor userData" name="mor">{{medi.mor}}</td>
               <td class="mediAft userData" name="aft">{{medi.aft}}</td>
               <td class="mediNit userData" name="it">{{medi.nit}}</td>
+              <td ><input type="number" id="count" name="count" value="10" style="width: 50px;"/></td>
               <td align="center">
-                <input type="checkbox" id="yes" name="yes" value="Yes">
-                <label for="morning">Available</label>
-              </td>
+                <input type="checkbox" id="myCheck" onClick="updateStatus({{medi.id}})" value="Available">
+                <label for="available">Available</label>
+              </td> 
           </tr>
           {% endfor %}
-      {% else %}
-        No medicine
-      {% endif %}
+          {% else %}
+            <h4>No medicine</h4>
+          {% endif %}
         </table>
         <div align="center">
           <a class="btn btn-sm" href="{% url 'prescriptionView' d.adharNumber %}">
-            <button  type="submit" title="Save" class="btn btn-success pull-right">View</button>
+            <button  type="submit" title="Save" class="btn btn-success pull-right">Print</button>
           </a>
         </div>
-      
 
-  {% endfor %}
+        <script>
+          function updateStatus(id) {
+            // Get the checkbox
+            var checkBox = document.getElementById("myCheck");  
+                      
+            var token = "{{csrf_token}}";          
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true){
+              var status = $('#myCheck').val();
+              var count = $('#count').val();
+              $.ajax({
+                type: "POST",
+                headers: { "X-CSRFToken": token },
+                url: "{% url 'updateMedicines' d.adharNumber %}",
+                data: {
+                      id : id, count : count, status = status
+                  },
+                dataType: 'json',
+                success: function (data) {
+                      alert("success")
+                      }
+                  
+                });
+            } 
+            else {
+              
+            }
+          }
+      </script>
+        
+{% endfor %}
 {% endblock content %}
 

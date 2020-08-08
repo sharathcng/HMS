@@ -7,6 +7,7 @@ from doctor.forms import PatientRegisterForms
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from datetime import date
+from HomePage.views import home_page
 
 # Create your views here.
 
@@ -28,9 +29,10 @@ def dr_SignUp_Page(request):
             except User.DoesNotExist:
                 mobileNumber = request.POST['mobileNumber']
                 gender = request.POST['gender']
+                aboutMe = request.POST['aboutMe']
                 if len(mobileNumber) == 10 :
                     user = User.objects.create_user(username=request.POST['username'],first_name=request.POST['firstname'],last_name=request.POST['lastname'],password=request.POST['password'],email=request.POST['email'])
-                    newExtendedUser = extendedUser(mobileNumber = mobileNumber,gender=gender,user=user) 
+                    newExtendedUser = extendedUser(mobileNumber = mobileNumber,gender=gender,aboutMe=aboutMe,user=user) 
                     newExtendedUser.save()                   
                     auth.login(request,user)
                     return redirect(dr_dashboard)
@@ -54,9 +56,15 @@ def dr_Login_Page(request):
     else:
         return render(request,'doctor/drLoginPage.html')
 
+@login_required
+def dr_Profile_Page(request):
+    data1 = User.objects.filter(username=request.user)
+    data2 = extendedUser.objects.filter(user=request.user)
+    return render(request,'doctor/drProfile.html',{'data1':data1,'data2':data2})
+
 def logout(request):
     auth.logout(request)
-    return render(request,'hospital/homePage.html')
+    return redirect(home_page)
 
 
 #patient_data
@@ -103,7 +111,7 @@ def patientMedhistory(request,id):
         patient = patientModel.objects.filter(adharNumber=id)
         medicine = medicines.objects.all()
         symptomsList = symptoms.objects.all()
-        todaysmedicines = patientMedicineModel.objects.filter(date=date.today())
+        todaysmedicines = patientMedicineModel.objects.filter(pAdharNumber=id)
         context = {'patient': patient, 'medicine': medicine,
                 'symptomsList': symptomsList, 'todaysmedicines': todaysmedicines}
         return render(request, 'patients/drPatientMedicinehistoryPage.html',context)
@@ -148,3 +156,5 @@ def delete_medicines(request,pk):
         'deleted': True
     }
     return JsonResponse(data)
+
+
