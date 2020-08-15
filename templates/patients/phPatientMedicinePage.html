@@ -14,7 +14,7 @@
           </ol>
         </div>
       </div>
-    </section><!-- End Breadcrumbs Section -->
+    </section>
 {% csrf_token %}
     
     <div class="table-responsive">
@@ -84,15 +84,16 @@
               <td class="mediMor userData" name="mor">{{medi.mor}}</td>
               <td class="mediAft userData" name="aft">{{medi.aft}}</td>
               <td class="mediNit userData" name="it">{{medi.nit}}</td>
-              <td ><input type="number" id="count" name="count" value="10" style="width: 50px;"/></td>
+              <td ><input type="number" id="count-{{medi.id}}" name="count" value="10" style="width: 50px;"/>
+              </td>
               <td align="center">
-                <input type="checkbox" id="myCheck" onClick="updateStatus({{medi.id}})" value="Available">
-                <label for="available">Available</label>
+                <input type="checkbox" id="check-{{medi.id}}" onClick="updateStatus({{medi.id}})" value="Available"/>
+                <label for="available">Available</label><div id="error-list"></div>
               </td> 
           </tr>
           {% endfor %}
           {% else %}
-            <h4>No medicine</h4>
+          No Medicines
           {% endif %}
         </table>
         <div align="center">
@@ -101,35 +102,66 @@
           </a>
         </div>
 
-        <script>
+        <script type="text/javascript">
+          function updateStatus(id) {
+            var checkBox = $('#check-'+id);  
+            var token = "{{csrf_token}}";
+            var count = $('#count-'+id).val();           
+            // If the checkbox is checked, display the output text
+            if (checkBox.change){
+            
+              //var action = confirm("Available?");
+              //var token = "{{csrf_token}}";
+              //var count = $('#count-'+id).val(); 
+              //if (action != false) {
+                $.ajax({
+                  type: "POST",
+                  headers: { "X-CSRFToken": token },
+                  url: "{% url 'updateMedicines' d.adharNumber %}",
+                  data: {
+                        id: id, count:count
+                    },
+                  dataType: 'json',
+                  success: function (data) {
+                    $("#error-list").html(
+                      '<p style="color:brown">yes</p>'
+                    );
+                    console.log(data);
+                  },
+                  error: function (data) {},
+                });
+              }
+            }
+      </script>
+        <!-- <script>
           function updateStatus(id) {
             // Get the checkbox
             var checkBox = document.getElementById("myCheck");  
-                      
+            var status = $('#myCheck').val();
+            var count = $('#count').val();   
             var token = "{{csrf_token}}";          
             // If the checkbox is checked, display the output text
             if (checkBox.checked == true){
-              var status = $('#myCheck').val();
-              var count = $('#count').val();
+              
               $.ajax({
                 type: "POST",
                 headers: { "X-CSRFToken": token },
                 url: "{% url 'updateMedicines' d.adharNumber %}",
-                data: {
-                      id : id, count : count, status = status
-                  },
-                dataType: 'json',
-                success: function (data) {
-                      alert("success")
-                      }
+                data: { medici : medici, morning : morning, afternoon : afternoon, night : night, count : count},
+    
+                dataType : 'json',
+                success: function () {
                   
-                });
+                  alert("no success");
+                  }
+                
+            });
             } 
             else {
-              
+              alert("no success");
             }
           }
-      </script>
+      </script> -->
         
 {% endfor %}
 {% endblock content %}

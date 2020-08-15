@@ -116,7 +116,7 @@ def patientMedhistory(request,id):
         patient = patientModel.objects.filter(adharNumber=id)
         medicine = medicines.objects.all()
         symptomsList = symptoms.objects.all()
-        todaysmedicines = patientMedicineModel.objects.filter(date=date.today(),pAdharNumber=id)
+        todaysmedicines = patientMedicineModel.objects.filter(pAdharNumber=id)
         context = {'patient': patient, 'medicine': medicine,
                 'symptomsList': symptomsList, 'todaysmedicines': todaysmedicines}
         return render(request, 'patients/phPatientMedicinehistoryPage.html',context)
@@ -137,7 +137,7 @@ def render_to_pdf(template_src, context_dict={}):
 class ViewPDF(View):
 	def get(self, request, *args, **kwargs):
 		patient = patientModel.objects.filter(adharNumber=kwargs['pk'])
-		todaysmedicines = patientMedicineModel.objects.filter(date=date.today(),pAdharNumber=kwargs['pk'],status="Available")
+		todaysmedicines = patientMedicineModel.objects.filter(date=date.today(),pAdharNumber=kwargs['pk'],status="Delivered")
 		data = {'patient': patient,'todaysmedicines': todaysmedicines}
 		pdf = render_to_pdf('patients/pdf.html', data)
 		return HttpResponse(pdf, content_type='application/pdf')
@@ -156,7 +156,7 @@ class ViewPDF(View):
 # 		return response
 
 def update_medicines(request,pk):
-    patientMedicineModel.objects.filter(id=pk).update(status=request.POST['status'],count=request.POST['count'])
+    patientMedicineModel.objects.filter(id=request.POST['id']).update(status="Delivered",count=request.POST['count'])
     data = {
         'adharNumber':pk,
     }
